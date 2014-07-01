@@ -40,39 +40,43 @@ img{display:block;background:skyblue}
     <script>
         
         var distance = $('#photoSlide img').width(),
+            list_items = $('#photoSlide ul').children(),
             flag = 1;
     
-        $('#photoSlide').on('click', 'button', function() {
-            
-            var list_items = $('#photoSlide ul').children();
-            
-            if ($(this).hasClass('next')) {
-                $('#photoSlide > ul').animate({
-                    left: "-=" + distance
-                });
+        (function() {
+            $('#photoSlide').on('click', 'button', function() {
                 
-                if(flag === list_items.length) {
-                    list_items.clone().appendTo($('#photoSlide ul'));
+                //var list_items = $('#photoSlide ul').children();
+                list_items = list_items.clone();
+                
+                if ($(this).hasClass('next')) {
+                    $('#photoSlide > ul').animate({
+                        left: "-=" + distance
+                    });
+                    
+                    if(flag === list_items.length) {
+                        list_items.clone().appendTo($('#photoSlide ul'));
+                    }
+                    
+                    console.log(flag += 1);
+                    
+                } else if ($(this).hasClass('prev')) {
+                    $('#photoSlide > ul').animate({
+                        left: "+=" + distance
+                    });
+                    
+                    if(flag === 1) {
+                        list_items.clone().prependTo($('#photoSlide ul'));
+                    }
+                    
+                    console.log(flag -= 1);
+                    
                 }
                 
-                console.log(flag += 1);
+                console.log(list_items.length + "개");
                 
-            } else if ($(this).hasClass('prev')) {
-                $('#photoSlide > ul').animate({
-                    left: "+=" + distance
-                });
-                
-                if(flag === 1) {
-                    list_items.clone().prependTo($('#photoSlide ul'));
-                }
-                
-                console.log(flag -= 1);
-                
-            }
-            
-            console.log(list_items.length + "개");
-            
-        });
+            });
+        })();
     
     </script>
 </body>
