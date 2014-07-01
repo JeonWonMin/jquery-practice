@@ -1,0 +1,79 @@
+
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>function</title>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<style type="text/css">
+#photoSlide{overflow:hidden;position:relative;width:450px;height:300px}
+button{position:absolute;top:50%}
+.prev{left:10px}
+.next{right:10px}
+ul{position:absolute;margin:0;padding:0}
+li{float:left;margin:0;padding:0;list-style:none}
+img{display:block;background:skyblue}
+</style>
+</head>
+<body>
+    <div id="photoSlide">
+        <ul style="width:300000px;">
+            <li>
+                <a href="#">
+                    <img src="" width="450" height="300" alt="photo1">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="" width="450" height="300" alt="photo2">
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <img src="" width="450" height="300" alt="photo3">
+                </a>
+            </li>
+        </ul>
+        <button class="prev">prev</button>
+        <button class="next">next</button>
+    </div>
+    <script>
+        
+        var distance = $('#photoSlide img').width(),
+            flag = 1;
+    
+        $('#photoSlide').on('click', 'button', function() {
+            
+            var list_items = $('#photoSlide ul').children();
+            
+            if ($(this).hasClass('next')) {
+                $('#photoSlide > ul').animate({
+                    left: "-=" + distance
+                });
+                
+                if(flag === list_items.length) {
+                    list_items.clone().appendTo($('#photoSlide ul'));
+                }
+                
+                console.log(flag += 1);
+                
+            } else if ($(this).hasClass('prev')) {
+                $('#photoSlide > ul').animate({
+                    left: "+=" + distance
+                });
+                
+                if(flag === 1) {
+                    list_items.clone().prependTo($('#photoSlide ul'));
+                }
+                
+                console.log(flag -= 1);
+                
+            }
+            
+            console.log(list_items.length + "개");
+            
+        });
+    
+    </script>
+</body>
+</html>
