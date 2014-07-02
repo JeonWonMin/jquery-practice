@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>function</title>
+<title>photoSlide</title>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <style type="text/css">
 #photoSlide{overflow:hidden;position:relative;width:450px;height:300px}
@@ -11,8 +11,8 @@ button{position:absolute;top:50%}
 .prev{left:10px}
 .next{right:10px}
 ul{position:absolute;margin:0;padding:0}
-li{float:left;margin:0;padding:0;list-style:none}
-img{display:block;background:skyblue}
+li{position:absolute;top:0;margin:0;padding:0;list-style:none}
+img{display:block}
 </style>
 </head>
 <body>
@@ -20,17 +20,17 @@ img{display:block;background:skyblue}
         <ul style="width:300000px;">
             <li>
                 <a href="#">
-                    <img src="" width="450" height="300" alt="photo1">
+                    <img src="" width="450" height="300" alt="photo1" style="background-color:skyblue">
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <img src="" width="450" height="300" alt="photo2">
+                    <img src="" width="450" height="300" alt="photo2" style="background-color:pink">
                 </a>
             </li>
             <li>
                 <a href="#">
-                    <img src="" width="450" height="300" alt="photo3">
+                    <img src="" width="450" height="300" alt="photo3" style="background-color:magenta">
                 </a>
             </li>
         </ul>
@@ -39,44 +39,73 @@ img{display:block;background:skyblue}
     </div>
     <script>
         
-        var distance = $('#photoSlide img').width(),
-            list_items = $('#photoSlide ul').children(),
-            flag = 1;
-    
-        (function() {
+        
+            // http://firejune.com/1527/jQuery+1.4+%EB%B2%84%EC%A0%84%EC%97%90+%EC%B6%94%EA%B0%80%EB%90%9C+%EC%83%88+%EA%B8%B0%EB%8A%A5+15%EA%B0%9C
+
+        
+            var items_list = $('#photoSlide ul > li'),
+                imgWidth = $('#photoSlide img').width(),
+                distance, position, flag = 1;
+                
+            var itemControl = {
+                getNext: function() {
+                    items_list.clone().appendTo($('#photoSlide ul'));
+                },
+                getPrev: function() {
+                    items_list.clone().prependTo($('#photoSlide ul'))
+                },
+                setPos: function() {
+                    distance = imgWidth;
+                    position = 0;
+                    
+                    $.each(items_list, function(i, item) {
+                        item.style.left = position + 'px';
+                        position += imgWidth;
+                    });    
+                }
+            };
+            
+            itemControl.setPos();
+        
+            // eventHandler
             $('#photoSlide').on('click', 'button', function() {
                 
-                //var list_items = $('#photoSlide ul').children();
-                list_items = list_items.clone();
+                var direction = {
+                    m: "-=",
+                    p: "+="
+                };
                 
                 if ($(this).hasClass('next')) {
+                
+                    flag++;
+                
                     $('#photoSlide > ul').animate({
-                        left: "-=" + distance
+                        left: direction.m + distance
                     });
-                    
-                    if(flag === list_items.length) {
-                        list_items.clone().appendTo($('#photoSlide ul'));
-                    }
-                    
-                    console.log(flag += 1);
                     
                 } else if ($(this).hasClass('prev')) {
+                
+                    flag--;
+                
                     $('#photoSlide > ul').animate({
-                        left: "+=" + distance
+                        left: direction.p + distance
                     });
-                    
-                    if(flag === 1) {
-                        list_items.clone().prependTo($('#photoSlide ul'));
-                    }
-                    
-                    console.log(flag -= 1);
                     
                 }
                 
-                console.log(list_items.length + "개");
+                if(flag > items_list.length) {
+                    itemControl.getNext();
+                } else if (flag <= 0) {
+                    itemControl.getPrev();
+                }
+                
+                console.log(items_list.length + "개" + ', ' + flag + '번째');
                 
             });
-        })();
+            
+            
+            
+
     
     </script>
 </body>
