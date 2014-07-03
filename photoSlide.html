@@ -7,106 +7,106 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <style type="text/css">
 #photoSlide{overflow:hidden;position:relative;width:450px;height:300px}
+#photoSlide > div{position:relative}
 button{position:absolute;top:50%}
 .prev{left:10px}
 .next{right:10px}
 ul{position:absolute;margin:0;padding:0}
-li{position:absolute;top:0;margin:0;padding:0;list-style:none}
+li{float:left;position:absolute;margin:0;padding:0;list-style:none}
 img{display:block}
 </style>
 </head>
 <body>
     <div id="photoSlide">
-        <ul style="width:300000px;">
-            <li>
-                <a href="#">
-                    <img src="" width="450" height="300" alt="photo1" style="background-color:skyblue">
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="" width="450" height="300" alt="photo2" style="background-color:pink">
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <img src="" width="450" height="300" alt="photo3" style="background-color:magenta">
-                </a>
-            </li>
-        </ul>
+        <div>        
+            <ul style="width:300000px;">
+                <li>
+                    <a href="#">
+                        <img src="" width="450" height="300" alt="photo1" style="background-color:skyblue">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="" width="450" height="300" alt="photo2" style="background-color:pink">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="" width="450" height="300" alt="photo3" style="background-color:magenta">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="" width="450" height="300" alt="photo4" style="background-color:skyblue">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="" width="450" height="300" alt="photo5" style="background-color:pink">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="" width="450" height="300" alt="photo6" style="background-color:magenta">
+                    </a>
+                </li>
+            </ul>
+        </div>
         <button class="prev">prev</button>
         <button class="next">next</button>
     </div>
     <script>
-        
-        
-            // http://firejune.com/1527/jQuery+1.4+%EB%B2%84%EC%A0%84%EC%97%90+%EC%B6%94%EA%B0%80%EB%90%9C+%EC%83%88+%EA%B8%B0%EB%8A%A5+15%EA%B0%9C
+        // http://firejune.com/1527/jQuery+1.4+%EB%B2%84%EC%A0%84%EC%97%90+%EC%B6%94%EA%B0%80%EB%90%9C+%EC%83%88+%EA%B8%B0%EB%8A%A5+15%EA%B0%9C
 
-        
-            var items_list = $('#photoSlide ul > li'),
+        (function() {
+            var list_wrapper = $('#photoSlide > div'),
+                list_parent = $('#photoSlide > div > ul'),
+                list_children = $('#photoSlide > div > ul > li'),
                 imgWidth = $('#photoSlide img').width(),
-                distance, position, flag = 1;
+                distance,
+                position,
+                flag = 1;
                 
             var itemControl = {
-                getNext: function() {
-                    items_list.clone().appendTo($('#photoSlide ul'));
-                },
-                getPrev: function() {
-                    items_list.clone().prependTo($('#photoSlide ul'))
-                },
                 setPos: function() {
                     distance = imgWidth;
                     position = 0;
-                    
-                    $.each(items_list, function(i, item) {
+                           
+                    $.each(list_children, function(i, item) {
                         item.style.left = position + 'px';
                         position += imgWidth;
-                    });    
+                    });
+                    
+                    list_children.last()[0].style.left = -distance + 'px';
                 }
             };
+    
+            (function() {
+                // eventHandler
+                $('#photoSlide').on('click', 'button', function() {
+                    var direction = {m: '-=', p: '+='};
+                        distance = imgWidth;
+                    
+                    if ($(this).hasClass('next')) {
+                        flag++;
+                    
+                        $(list_wrapper).animate({
+                            left: direction.m + distance
+                        });
+                    } else if ($(this).hasClass('prev')) {
+                        flag--;
+                    
+                        $(list_wrapper).animate({
+                            left: direction.p + distance
+                        });
+                    }
+                    
+                    console.log(list_children.length + "개" + ', ' + flag + '번째');
+                });
+            })();
             
             itemControl.setPos();
-        
-            // eventHandler
-            $('#photoSlide').on('click', 'button', function() {
-                
-                var direction = {
-                    m: "-=",
-                    p: "+="
-                };
-                
-                if ($(this).hasClass('next')) {
-                
-                    flag++;
-                
-                    $('#photoSlide > ul').animate({
-                        left: direction.m + distance
-                    });
-                    
-                } else if ($(this).hasClass('prev')) {
-                
-                    flag--;
-                
-                    $('#photoSlide > ul').animate({
-                        left: direction.p + distance
-                    });
-                    
-                }
-                
-                if(flag > items_list.length) {
-                    itemControl.getNext();
-                } else if (flag <= 0) {
-                    itemControl.getPrev();
-                }
-                
-                console.log(items_list.length + "개" + ', ' + flag + '번째');
-                
-            });
-            
-            
-            
-
-    
+        })();
     </script>
 </body>
 </html>
