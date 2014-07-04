@@ -69,7 +69,7 @@ img{display:block}
                 position = 0;
                        
                 $.each(list_children, function(i, item) {
-                    item.style.left = position + 'px';
+                    $(item).css('left', position);
                     position += distance;
                 });
             })();
@@ -91,7 +91,7 @@ img{display:block}
                             });
                             
                             $('#photoSlide > div > ul > li:first').appendTo(list_parent);
-
+                            
                     } else if ($(this).hasClass('prev')) {
 
                             current -= 1;
@@ -103,6 +103,7 @@ img{display:block}
                             $('#photoSlide > div > ul > li:last').prependTo(list_parent);
                             
                     }
+                    
                 });
             })();
             
