@@ -62,50 +62,50 @@ img{display:block}
             var list_wrapper = $('#photoSlide > div'),
                 list_parent = $('#photoSlide > div > ul'),
                 list_children = $('#photoSlide > div > ul > li'),
-                imgWidth = $('#photoSlide img').width(),
-                distance,
-                position,
-                flag = 1;
+                distance = $('#photoSlide img').width(),
+                position;
                 
-            var itemControl = {
-                setPos: function() {
-                    distance = imgWidth;
-                    position = 0;
-                           
-                    $.each(list_children, function(i, item) {
-                        item.style.left = position + 'px';
-                        position += imgWidth;
-                    });
-                    
-                    list_children.last()[0].style.left = -distance + 'px';
-                }
-            };
+            var setPos = (function() {
+                position = 0;
+                       
+                $.each(list_children, function(i, item) {
+                    item.style.left = position + 'px';
+                    position += distance;
+                });
+            })();
     
             (function() {
+                var direction = {m: '-=', p: '+='},
+                    current = 1,
+                    end = list_children.length;
+            
                 // eventHandler
                 $('#photoSlide').on('click', 'button', function() {
-                    var direction = {m: '-=', p: '+='};
-                        distance = imgWidth;
-                    
+                
                     if ($(this).hasClass('next')) {
-                        flag++;
-                    
-                        $(list_wrapper).animate({
-                            left: direction.m + distance
-                        });
+
+                            current += 1;
+                            
+                            $(list_wrapper).animate({
+                                left: direction.m + distance
+                            });
+                            
+                            $('#photoSlide > div > ul > li:first').appendTo(list_parent);
+
                     } else if ($(this).hasClass('prev')) {
-                        flag--;
-                    
-                        $(list_wrapper).animate({
-                            left: direction.p + distance
-                        });
+
+                            current -= 1;
+                            
+                            $(list_wrapper).animate({
+                                left: direction.p + distance
+                            });
+                            
+                            $('#photoSlide > div > ul > li:last').prependTo(list_parent);
+                            
                     }
-                    
-                    console.log(list_children.length + "개" + ', ' + flag + '번째');
                 });
             })();
             
-            itemControl.setPos();
         })();
     </script>
 </body>
